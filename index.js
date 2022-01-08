@@ -329,7 +329,7 @@ function toArray(nodelist) {
         case 2:
           film = _a.sent().film;
           filename = (0, unusedFilenameSync)(
-            os_1.homedir + "/Desktop" + ("/" + film + ".txt")
+            os_1.homedir + "/Desktop" + ("/" + film + ".md")
           );
           return [4 /*yield*/, new FilmSubtitle().subtitles(film)];
         case 3:
@@ -343,38 +343,20 @@ function toArray(nodelist) {
             " Film\n\n" +
             films
               .map(function (e) {
-                return (
-                  "Film Name: " +
-                  e.filmName +
-                  "\nsubTitles:\n-----------------------------------------------------------------------------------------\n" +
-                  e.subtitles
-                    .map(function (s) {
-                      return (
-                        "Movie/Release: " +
-                        s.movie_release +
-                        "\nLanguage: " +
-                        s.language +
-                        "\nComment: " +
-                        s.comment +
-                        "\nTranslate File Size: " +
-                        s.size +
-                        "KB\nCreatedAt: " +
-                        s.createdAt +
-                        "\nDownloadUrl: " +
-                        s.downloadUrl
-                      );
-                    })
-                    .join(
-                      "\n-----------------------------------------------------------------------------------------\n"
-                    )
-                );
+                return `# ${e.filmName}\n## subtitles:\n ${e.subtitles.filter(e=>e.size !== 0).map(
+                  (s,index) => {
+                    return `### ${index+1}- Movie/Release: ${
+                      s.movie_release
+                    }\n### Language: ${s.language}\n${
+                      s.comment ? `Comment: ${s.comment}\n` : ""
+                    }### Translate File Size: ${s.size}KB\n### CreatedAt: ${s.createdAt}\n### [Download Translate File](${s.downloadUrl})`;
+                  }
+                ).join('\n<br />\n')}`;
               })
-              .join(
-                "\n____________________________________________________________________________________________________________________\n"
-              );
+              .join("<hr />\n");
           (0, fs_1.writeFileSync)(filename, data);
           (0, child_process_1.execFileSync)("notepad", [filename]);
-          console.log(`Created SuccessFully. The File dir:\n${filename}`)
+          console.log(`Created SuccessFully. The File dir:\n${filename}`);
           return [2 /*return*/];
       }
     });
