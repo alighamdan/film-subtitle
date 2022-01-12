@@ -18,7 +18,8 @@
     "prompts": "^2.4.2",
     "supports-color": "^9.2.1",
     "terminal-link": "^3.0.0",
-    "unused-filename": "^4.0.0"
+    "unused-filename": "^4.0.0",
+    "yaml": "^1.10.2"
   },
   "name": "films-subtitles",
   "version": "1.0.0",

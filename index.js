@@ -14,6 +14,8 @@ import { execFileSync, execSync } from "child_process";
 import { marked } from "marked";
 import nodeHtmlToImage from "node-html-to-image";
 import { getEdgePath } from "edge-paths";
+import yaml_1 from 'yaml';
+const yaml = yaml_1
 const { textSync } = figlet;
 
 class FilmSubtitle {
@@ -166,6 +168,16 @@ function toArray(nodelist) {
                     value: "png",
                     description: "extract As .png File",
                 },
+                {
+                    title: "json",
+                    value: "json",
+                    description: "extract As .json File"
+                },
+                {
+                    title: 'yaml',
+                    value: 'yaml',
+                    description: 'extract As .yaml File'
+                }
             ],
         },
         {
@@ -202,18 +214,20 @@ function toArray(nodelist) {
 
     if (types === "md") {
         writeFileSync(filename, data);
-        execSync(`"${filename}"`);
     } else if (types === "html") {
         writeFileSync(filename, marked.parse(data));
-        execSync(`"${filename}"`);
-    } else {
+    } else if (types === 'png') {
         writeFileSync(
             filename,
             await nodeHtmlToImage({
                 html: marked.parse(data),
                 puppeteerArgs: { executablePath: path !== "" ? path : getEdgePath() },
             })
-        );
-        execSync(`"${filename}"`);
+        )
+    } else if (types === 'json') {
+        writeFileSync(filename, JSON.stringify(films));
+    }else if (types === 'yaml') {
+        writeFileSync(filename, yaml.stringify(films));
     }
+    execSync(`"${filename}"`);
 })();
