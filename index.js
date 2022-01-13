@@ -10,13 +10,18 @@ import eachAsync from "each-async";
 import { writeFileSync } from "fs";
 import chalk from "chalk";
 import { homedir } from "os";
-import { execFileSync, execSync } from "child_process";
+import { execSync } from "child_process";
 import { marked } from "marked";
 import nodeHtmlToImage from "node-html-to-image";
 import { getEdgePath } from "edge-paths";
 import yaml_1 from 'yaml';
+import { createInterface } from 'readline';
 const yaml = yaml_1
 const { textSync } = figlet;
+const rl = createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
 
 class FilmSubtitle {
     constructor() { }
@@ -121,10 +126,11 @@ function toArray(nodelist) {
             console.log(
                 chalk.bold.red(`You Are Offline! Please Try When You Back Online`)
             );
+            
         } else {
             console.log(`You Are Offline! Please Try When You Back Online`);
         }
-        return;
+        rl.question(`Press Any Key To Exit...`, () => { process.exit(0); });
     }
     let text = textSync("Ali Dev", { font: "Larry 3D" });
     if (supportsColors) {
